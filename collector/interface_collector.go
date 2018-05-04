@@ -75,13 +75,19 @@ func (c *interfaceCollector) collectForStat(re *proto.Sentence, ctx *collectorCo
 
 func (c *interfaceCollector) collectMetricForProperty(property, iface string, re *proto.Sentence, ctx *collectorContext) {
 	desc := c.descriptions[property]
-	v, err := strconv.ParseFloat(re.Map[property], 64)
+
+	mapped := re.Map[property]
+	if len(mapped) == 0 {
+		return
+	}
+
+	v, err := strconv.ParseFloat(mapped, 64)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"device":    ctx.device.Name,
 			"interface": iface,
 			"property":  property,
-			"value":     re.Map[property],
+			"value":     mapped,
 			"error":     err,
 		}).Error("error parsing interface metric value")
 		return
