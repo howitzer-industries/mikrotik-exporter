@@ -46,7 +46,7 @@ type collector struct {
 // WithBGP enables BGP routing metrics
 func WithBGP() Option {
 	return func(c *collector) {
-		c.collectors = append(c.collectors, &bgpCollector{})
+		c.collectors = append(c.collectors, newBGPCollector())
 	}
 }
 
@@ -75,6 +75,13 @@ func WithDHCPv6() Option {
 func WithPools() Option {
 	return func(c *collector) {
 		c.collectors = append(c.collectors, newPoolCollector())
+	}
+}
+
+// WithOptics enables optical diagnstocs
+func WithOptics() Option {
+	return func(c *collector) {
+		c.collectors = append(c.collectors, newOpticsCollector())
 	}
 }
 
